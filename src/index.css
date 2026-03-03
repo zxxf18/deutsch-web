@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-gradient-to-b from-slate-50 to-gray-100 text-gray-900 antialiased min-h-screen;
+}
+
+/* 平滑滚动 */
+html {
+  scroll-behavior: smooth;
+}
+
+/* 选中文字配色 */
+::selection {
+  @apply bg-blue-200 text-blue-900;
+}
