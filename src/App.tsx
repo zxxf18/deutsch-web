@@ -21,6 +21,7 @@ import { Profile } from './pages/Profile'
 import { AdminUsers } from './pages/AdminUsers'
 import { AdminInviteCodes } from './pages/AdminInviteCodes'
 import { NotFound } from './pages/NotFound'
+import { ScrollManager } from './components/ScrollManager'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,6 +34,7 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <Toaster position="top-center" />
       <BrowserRouter basename="/deutsch">
+        <ScrollManager />
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
