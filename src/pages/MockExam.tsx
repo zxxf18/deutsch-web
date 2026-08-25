@@ -40,6 +40,7 @@ export function MockExam() {
       progressApi.submitExam(stateId, answers),
     onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: ['exams'] })
+      queryClient.invalidateQueries({ queryKey: ['wrong-questions'] })
       const examId = res?.data?.id
       if (examId) {
         navigate(`/exams/${examId}`)

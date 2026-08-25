@@ -8,6 +8,7 @@ import type { QuestionItem } from '@/types'
 import { ChevronLeft, ChevronRight, CheckCircle2 } from 'lucide-react'
 import { QuestionOption } from '@/components/QuestionOption'
 import { QuestionOverviewPanel } from '@/components/QuestionOverviewPanel'
+import { toast } from 'sonner'
 
 type QStatus = 'unanswered' | 'answered' | 'correct' | 'wrong'
 
@@ -42,10 +43,7 @@ export function Practice() {
     mutationFn: ({ questionId, correct }: { questionId: string; correct: boolean }) =>
       progressApi.recordPractice(questionId, correct),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['learning'] }),
-  })
-  const addWrong = useMutation({
-    mutationFn: progressApi.addWrongQuestion,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['wrong-questions'] }),
+    onError: (error) => toast.error((error as Error).message),
   })
 
   const [idx, setIdx] = useState(0)
@@ -72,10 +70,16 @@ export function Practice() {
   const handleConfirm = () => {
     if (selected == null || !q) return
     const correct = selected === q.correctAnswer
-    recordPractice.mutate({ questionId: q.id, correct })
-    if (!correct) addWrong.mutate(q.id)
-    setAnswerStatus((s) => ({ ...s, [idx]: correct ? 'correct' : 'wrong' }))
-    setShowResult(true)
+    recordPractice.mutate(
+      { questionId: q.id, correct },
+      {
+        onSuccess: () => {
+          if (!correct) queryClient.invalidateQueries({ queryKey: ['wrong-questions'] })
+          setAnswerStatus((s) => ({ ...s, [idx]: correct ? 'correct' : 'wrong' }))
+          setShowResult(true)
+        },
+      }
+    )
   }
   const handleNext = () => {
     setIdx((i) => Math.min(i + 1, items.length - 1))
@@ -179,7 +183,7 @@ export function Practice() {
         {!showResult ? (
           <button
             onClick={handleConfirm}
-            disabled={selected == null}
+            disabled={selected == null || recordPractice.isPending}
             className="btn-primary flex-1"
           >
             确认
