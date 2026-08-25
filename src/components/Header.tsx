@@ -1,6 +1,6 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '@/stores/auth'
-import { Menu, LogOut, User, ChevronDown } from 'lucide-react'
+import { Menu, LogOut, User, ChevronDown, X } from 'lucide-react'
 import { useState } from 'react'
 
 export function Header() {
@@ -29,36 +29,40 @@ export function Header() {
   ]
 
   return (
-    <header className="bg-white/95 backdrop-blur border-b border-gray-200 shadow-sm sticky top-0 z-50">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-14">
-          <Link to="/" className="font-bold text-xl text-gray-800">
-            德国入籍考试
+    <header className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/85 backdrop-blur-xl">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-[4.5rem] items-center justify-between">
+          <Link to="/" className="flex items-center gap-3 text-slate-950">
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-slate-950 text-sm font-bold text-white shadow-lg shadow-slate-950/20">德</span>
+            <span className="hidden sm:block">
+              <span className="block text-[15px] font-bold leading-tight tracking-tight">Einbürgerung</span>
+              <span className="block text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">德国入籍考试</span>
+            </span>
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-4">
+          <nav className="hidden md:flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50/80 p-1">
             {navLinks.map(({ to, label, auth, guestOrAdmin }) => {
               if (guestOrAdmin && isAuthenticated && !isAdmin) return null
               if (auth && !isAuthenticated) return null
               return (
-                <Link
+                <NavLink
                   key={to}
                   to={to}
-                  className="text-gray-600 hover:text-gray-900 px-2"
+                  className={({ isActive }) => `rounded-full px-3 py-1.5 text-sm font-medium transition ${isActive ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-500 hover:text-slate-950'}`}
                 >
                   {label}
-                </Link>
+                </NavLink>
               )
             })}
             {isAdmin && (
               <>
-                <Link to="/admin/users" className="text-gray-600 hover:text-gray-900 px-2">
+                <NavLink to="/admin/users" className={({ isActive }) => `rounded-full px-3 py-1.5 text-sm font-medium transition ${isActive ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-500 hover:text-slate-950'}`}>
                   用户管理
-                </Link>
-                <Link to="/admin/invite-codes" className="text-gray-600 hover:text-gray-900 px-2">
+                </NavLink>
+                <NavLink to="/admin/invite-codes" className={({ isActive }) => `rounded-full px-3 py-1.5 text-sm font-medium transition ${isActive ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-500 hover:text-slate-950'}`}>
                   邀请码
-                </Link>
+                </NavLink>
               </>
             )}
           </nav>
@@ -69,14 +73,14 @@ export function Header() {
               <div className="relative">
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="flex items-center gap-1 px-2 py-1 rounded hover:bg-gray-100"
+                  className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:border-slate-300"
                 >
                   <User size={18} />
                   <span className="hidden sm:inline max-w-32 truncate" title={displayName}>
                     {displayName}
                   </span>
                   {isAdmin && (
-                    <span className="hidden lg:inline rounded bg-red-50 px-1.5 py-0.5 text-xs text-red-600">
+                    <span className="hidden lg:inline rounded-md bg-amber-100 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-800">
                       管理员
                     </span>
                   )}
@@ -85,17 +89,17 @@ export function Header() {
                 {userMenuOpen && (
                   <>
                     <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)} />
-                    <div className="absolute right-0 z-50 mt-1 w-40 bg-white rounded shadow-lg border py-1">
+                    <div className="absolute right-0 z-50 mt-2 w-44 rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl shadow-slate-900/10">
                       <Link
                         to="/profile"
-                        className="block px-4 py-2 hover:bg-gray-50"
+                        className="block rounded-xl px-3 py-2 text-sm font-medium hover:bg-slate-50"
                         onClick={() => setUserMenuOpen(false)}
                       >
                         个人中心
                       </Link>
                       <button
                         onClick={handleLogout}
-                        className="w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-2"
+                        className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-medium text-rose-600 hover:bg-rose-50"
                       >
                         <LogOut size={16} />
                         登出
@@ -108,13 +112,13 @@ export function Header() {
               <div className="flex gap-2">
                 <Link
                   to="/login"
-                  className="px-3 py-1.5 rounded border text-sm hover:bg-gray-50"
+                  className="hidden rounded-xl px-3 py-2 text-sm font-semibold text-slate-600 hover:text-slate-950 sm:inline-flex"
                 >
                   登录
                 </Link>
                 <Link
                   to="/register"
-                  className="px-3 py-1.5 rounded bg-blue-600 text-white text-sm hover:bg-blue-700"
+                  className="rounded-xl bg-slate-950 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-slate-950/10 hover:bg-blue-800"
                 >
                   注册
                 </Link>
@@ -123,17 +127,22 @@ export function Header() {
 
             {/* Mobile menu */}
             <button
-              className="md:hidden p-2"
+              className="rounded-xl p-2 text-slate-700 hover:bg-slate-100 md:hidden"
               onClick={() => setMenuOpen(!menuOpen)}
             >
-              <Menu size={24} />
+              {menuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
         </div>
 
         {/* Mobile nav */}
         {menuOpen && (
-          <nav className="md:hidden py-2 border-t flex flex-col gap-1">
+          <nav className="flex flex-col gap-1 border-t border-slate-100 py-3 md:hidden">
+            {!isAuthenticated && (
+              <Link to="/login" className="px-4 py-2 font-medium text-slate-700" onClick={() => setMenuOpen(false)}>
+                登录
+              </Link>
+            )}
             {navLinks.map(({ to, label, auth, guestOrAdmin }) => {
               if (guestOrAdmin && isAuthenticated && !isAdmin) return null
               if (auth && !isAuthenticated) return null

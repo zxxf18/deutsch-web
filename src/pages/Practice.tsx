@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { questionApi } from '@/api/question'
@@ -32,9 +32,11 @@ export function Practice() {
     enabled: !!stateId && !useGeneral,
   })
 
-  const generalItems = (generalData as { items?: QuestionItem[] })?.items ?? []
-  const stateItems = (stateData as { items?: QuestionItem[] })?.items ?? []
-  const items = useGeneral ? generalItems : [...generalItems, ...stateItems]
+  const items = useMemo(() => {
+    const generalItems = (generalData as { items?: QuestionItem[] })?.items ?? []
+    const stateItems = (stateData as { items?: QuestionItem[] })?.items ?? []
+    return useGeneral ? generalItems : [...generalItems, ...stateItems]
+  }, [generalData, stateData, useGeneral])
   const isLoading = !generalData || (!useGeneral && !!stateId && !stateData)
   const recordPractice = useMutation({
     mutationFn: ({ questionId, correct }: { questionId: string; correct: boolean }) =>
@@ -54,6 +56,8 @@ export function Practice() {
   useEffect(() => {
     if (qId && items.length > 0) {
       const found = items.findIndex((it) => it.id === qId)
+      // URL 中的题目参数是外部导航状态，需要在题库加载完成后同步一次。
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (found >= 0) setIdx(found)
     }
   }, [qId, items])

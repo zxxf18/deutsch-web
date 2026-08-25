@@ -53,6 +53,7 @@ export function Trial() {
   }
   const answerCount = Object.keys(answers).length
   const canSubmit = answerCount >= items.length && items.length > 0
+  const hasResults = !!results
 
   const statusMap: Record<number, QStatus> = {}
   if (results) {
@@ -96,7 +97,7 @@ export function Trial() {
       clearTimeout(timer)
       observer?.disconnect()
     }
-  }, [items.length, !!results])
+  }, [items.length, hasResults])
 
   if (isLoading) return <div className="py-8 text-center">加载中...</div>
   if (items.length === 0) return <div className="py-8 text-center">暂无题目</div>

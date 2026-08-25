@@ -14,8 +14,8 @@ interface AuthData {
 }
 
 export const authApi = {
-  login: async (email: string, password: string) => {
-    const res = await api.post<AuthData>('/auth/login', { email, password })
+  login: async (account: string, password: string) => {
+    const res = await api.post<AuthData>('/auth/login', { account, password })
     const d = res.data
     const user: User = {
       id: d.id!,
