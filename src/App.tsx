@@ -32,7 +32,7 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Toaster position="top-center" />
-      <BrowserRouter>
+      <BrowserRouter basename="/deutsch">
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />

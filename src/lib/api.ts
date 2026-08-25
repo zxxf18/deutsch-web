@@ -1,6 +1,6 @@
 import { useAuthStore } from '@/stores/auth'
 
-const BASE = '/api/v1'
+const BASE = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/api/v1`
 
 async function request<T>(
   path: string,
@@ -31,12 +31,12 @@ async function request<T>(
         res = await fetch(BASE + path, { ...opts, headers })
       } else {
         useAuthStore.getState().logout()
-        window.location.href = '/login'
+        window.location.href = `${import.meta.env.BASE_URL}login`
         throw new Error('登录已过期')
       }
     } else {
       useAuthStore.getState().logout()
-      window.location.href = '/login'
+      window.location.href = `${import.meta.env.BASE_URL}login`
       throw new Error('登录已过期')
     }
   }

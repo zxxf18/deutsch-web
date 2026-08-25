@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-const API_BASE = '/api/v1'
+const API_BASE = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/api/v1`
 
 /** 题目选项渲染：支持带图题目（optionsImagePath）或纯文本 */
 export function QuestionOption({
