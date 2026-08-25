@@ -7,6 +7,7 @@ interface AuthState {
   token: string | null
   expires: number | null
   setAuth: (user: User, token: string, expires: number) => void
+  setUser: (user: User) => void
   setToken: (token: string, expires: number) => void
   logout: () => void
   isAuthenticated: () => boolean
@@ -20,6 +21,7 @@ export const useAuthStore = create<AuthState>()(
       token: null,
       expires: null,
       setAuth: (user, token, expires) => set({ user, token, expires }),
+      setUser: (user) => set({ user }),
       setToken: (token, expires) => set({ token, expires }),
       logout: () => set({ user: null, token: null, expires: null }),
       isAuthenticated: () => !!get().token,

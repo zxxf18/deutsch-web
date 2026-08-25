@@ -9,6 +9,7 @@ export function Header() {
   const logout = useAuthStore((s) => s.logout)
   const isAuthenticated = !!token
   const isAdmin = user?.role === 'admin'
+  const displayName = user?.nickname?.trim() || user?.username || user?.email || '用户'
   const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
@@ -71,13 +72,20 @@ export function Header() {
                   className="flex items-center gap-1 px-2 py-1 rounded hover:bg-gray-100"
                 >
                   <User size={18} />
-                  <span className="hidden sm:inline">{user?.nickname || user?.username}</span>
+                  <span className="hidden sm:inline max-w-32 truncate" title={displayName}>
+                    {displayName}
+                  </span>
+                  {isAdmin && (
+                    <span className="hidden lg:inline rounded bg-red-50 px-1.5 py-0.5 text-xs text-red-600">
+                      管理员
+                    </span>
+                  )}
                   <ChevronDown size={16} />
                 </button>
                 {userMenuOpen && (
                   <>
-                    <div className="fixed inset-0" onClick={() => setUserMenuOpen(false)} />
-                    <div className="absolute right-0 mt-1 w-40 bg-white rounded shadow-lg border py-1">
+                    <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)} />
+                    <div className="absolute right-0 z-50 mt-1 w-40 bg-white rounded shadow-lg border py-1">
                       <Link
                         to="/profile"
                         className="block px-4 py-2 hover:bg-gray-50"

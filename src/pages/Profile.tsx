@@ -18,6 +18,7 @@ export function Profile() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const user = useAuthStore((s) => s.user)
+  const setUser = useAuthStore((s) => s.setUser)
   const { data } = useQuery({
     queryKey: ['user', user?.id],
     queryFn: () => userApi.getUser(user!.id),
@@ -25,15 +26,16 @@ export function Profile() {
   })
   const update = useMutation({
     mutationFn: userApi.updateProfile,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['user', user?.id] })
+    onSuccess: (updatedUser) => {
+      setUser(updatedUser)
+      queryClient.setQueryData(['user', updatedUser.id], updatedUser)
       toast.success('已保存')
     },
     onError: (e) => toast.error((e as Error).message),
   })
   const { register, handleSubmit } = useForm<Form>({
     resolver: zodResolver(schema),
-    values: data ? { nickname: data.nickname, description: (data as { description?: string }).description } : undefined,
+    values: data ? { nickname: data.nickname ?? '', description: (data as { description?: string }).description ?? '' } : undefined,
   })
 
   const u = data || user
