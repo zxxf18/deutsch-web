@@ -104,8 +104,8 @@ export function Trial() {
 
   if (results) {
     return (
-      <div className="max-w-3xl mr-[300px] max-md:mr-[240px]">
-        <h1 className="text-2xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">体验练习 - 结果</h1>
+      <div className="grid items-start gap-6 pb-28 lg:grid-cols-[minmax(0,1fr)_18rem] lg:pb-0"><div className="min-w-0">
+        <div className="mb-6"><div className="eyebrow">Trial result</div><h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-950">体验练习结果</h1></div>
         <div className="space-y-6 mb-8">
           {items.map((q, idx) => {
             const r = results.find((x) => x.questionId === q.id)
@@ -114,10 +114,10 @@ export function Trial() {
               <div
                 key={q.id}
                 ref={(el) => { refsMap.current[idx] = el }}
-                className="p-6 rounded-xl border-2 border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow scroll-mt-24"
+                className="surface scroll-mt-24 p-5 sm:p-6"
               >
-                <div className="text-sm font-medium text-gray-500 mb-2">第 {idx + 1} 题</div>
-                <div className="text-base font-medium text-gray-900 mb-4">
+                <div className="mb-2 text-xs font-bold uppercase tracking-wider text-blue-700">Question {String(idx + 1).padStart(2, '0')}</div>
+                <div className="mb-4 font-semibold leading-7 text-slate-950">
                   {langMode === 'de-cn' ? q.questionCn : q.questionDe}
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -145,18 +145,18 @@ export function Trial() {
         <div className="flex gap-3">
           <button
             onClick={() => { setResults(null); setAnswers({}) }}
-            className="px-5 py-2.5 rounded-xl border-2 border-gray-200 hover:border-blue-300 font-medium transition"
+            className="btn-secondary"
           >
             再练一次
           </button>
           <Link
             to="/"
-            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transition"
+            className="btn-primary"
           >
             返回首页
           </Link>
         </div>
-        <div className="mt-8 p-6 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-100">
+        <div className="mt-8 rounded-2xl border border-blue-200 bg-blue-50 p-6">
           <p className="text-sm text-blue-800">
             登录后解锁全部 {config?.totalQuestions ?? 460} 道题目与模拟考试
           </p>
@@ -165,7 +165,7 @@ export function Trial() {
           </Link>
         </div>
 
-        <QuestionOverviewPanel
+        </div><QuestionOverviewPanel
           total={items.length}
           currentIndex={scrollIndex}
           statusMap={statusMap}
@@ -177,18 +177,16 @@ export function Trial() {
   }
 
   return (
-    <div className="max-w-3xl mr-[300px] max-md:mr-[240px]">
-      <h1 className="text-xl font-bold mb-4">
-        体验练习（{config?.trialQuestionCount ?? 10} 道）
-      </h1>
-      <p className="text-gray-600 mb-4">
+    <div className="grid items-start gap-6 pb-28 lg:grid-cols-[minmax(0,1fr)_18rem] lg:pb-0"><div className="min-w-0">
+      <div className="surface mb-6 p-5 sm:p-6"><div className="eyebrow">Quick trial</div><h1 className="mt-2 text-2xl font-bold tracking-tight text-slate-950">体验练习</h1>
+      <p className="mt-2 text-sm text-slate-500">
         完成答题后点击提交查看结果
         {items.length > 0 && (
-          <span className="ml-2 text-blue-600">
+          <span className="ml-2 font-semibold text-blue-700">
             已选 {Object.keys(answers).length}/{items.length} 题
           </span>
         )}
-      </p>
+      </p></div>
       <div className="space-y-6">
         {items.map((q, idx) => (
           <div
@@ -209,12 +207,12 @@ export function Trial() {
       <button
         onClick={handleSubmit}
         disabled={check.isPending || !canSubmit}
-        className="mt-6 w-full py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+        className="btn-primary mt-6 w-full"
       >
         {check.isPending ? '提交中...' : '提交答案'}
       </button>
 
-      <QuestionOverviewPanel
+      </div><QuestionOverviewPanel
         total={items.length}
         currentIndex={scrollIndex}
         statusMap={statusMap}
@@ -239,13 +237,14 @@ function QuestionCard({
   langMode: string
 }) {
   return (
-    <div className="p-4 border rounded bg-white">
-      <div className="font-medium text-gray-500 mb-2">第 {index} 题</div>
-      <div className="mb-3">{langMode === 'de-cn' ? q.questionCn : q.questionDe}</div>
-      <div className="space-y-2">
+    <div className="surface p-5 sm:p-7">
+      <div className="mb-3 text-xs font-bold uppercase tracking-wider text-blue-700">Question {String(index).padStart(2, '0')}</div>
+      <div className="mb-6 text-lg font-semibold leading-8 text-slate-950">{langMode === 'de-cn' ? q.questionCn : q.questionDe}</div>
+      <div className="space-y-3">
         {(langMode === 'de-cn' ? q.optionsCn : q.optionsDe).map((opt, i) => (
           <QuestionOption
             key={i}
+            index={i}
             label={opt}
             imagePath={q.optionsImagePath?.[i]}
             selected={selected === i}

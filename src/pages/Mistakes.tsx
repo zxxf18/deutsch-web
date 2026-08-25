@@ -29,14 +29,14 @@ export function Mistakes() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="mx-auto max-w-4xl">
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg">
-            <BookOpen className="w-6 h-6 text-white" />
+          <div className="grid h-12 w-12 place-items-center rounded-xl bg-slate-950 text-white shadow-lg">
+            <BookOpen className="h-6 w-6" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+            <div className="eyebrow">Review mistakes</div><h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-950">
               错题本
             </h1>
             <p className="text-sm text-gray-500 mt-0.5">
@@ -47,7 +47,7 @@ export function Mistakes() {
       </div>
 
       {items.length === 0 ? (
-        <div className="p-12 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 border-2 border-dashed border-gray-200 text-center">
+        <div className="surface p-10 text-center sm:p-12">
           <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center mx-auto mb-4">
             <BookOpen className="w-8 h-8 text-gray-400" />
           </div>
@@ -55,7 +55,7 @@ export function Mistakes() {
           <p className="text-sm text-gray-400 mt-1">练习和模拟考试中的错题会出现在这里</p>
           <Link
             to="/practice"
-            className="inline-flex items-center gap-2 mt-6 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium hover:shadow-lg transition-all"
+            className="btn-primary mt-6"
           >
             去练习
             <ArrowRight className="w-4 h-4" />
@@ -66,7 +66,7 @@ export function Mistakes() {
           {items.map((q) => (
             <div
               key={q.id}
-              className="group p-6 rounded-2xl border-2 border-gray-100 bg-white shadow-card hover:shadow-card-hover hover:border-amber-100 transition-all"
+              className="group surface p-5 transition hover:-translate-y-0.5 hover:border-amber-200 sm:p-6"
             >
               <div className="flex items-start gap-4">
                 <Link

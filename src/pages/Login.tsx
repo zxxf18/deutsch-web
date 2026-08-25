@@ -39,7 +39,7 @@ export function Login() {
         <form onSubmit={handleSubmit((data) => login.mutate(data))} className="space-y-4">
           <div className="pt-5">
             <label className="mb-1.5 block text-sm font-semibold text-slate-700">用户名或邮箱</label>
-            <div className="relative"><UserRound className="absolute left-4 top-3.5 text-slate-400" size={18} /><input {...register('account')} autoComplete="username" className="field pl-11" placeholder="admin 或 admin@example.com" /></div>
+            <div className="relative"><UserRound className="absolute left-4 top-3.5 text-slate-400" size={18} /><input {...register('account')} autoComplete="username" className="field pl-11" placeholder="请输入用户名或邮箱" /></div>
             {formState.errors.account && <p className="mt-1 text-sm text-rose-600">{formState.errors.account.message}</p>}
           </div>
           <div>

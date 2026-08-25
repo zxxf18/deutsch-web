@@ -119,34 +119,31 @@ export function Practice() {
   }
 
   return (
-    <>
-    <div className="max-w-3xl mr-[300px] max-md:mr-[240px]">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent mb-2">
-          练习
-        </h1>
+    <div className="grid items-start gap-6 pb-28 lg:grid-cols-[minmax(0,1fr)_18rem] lg:pb-0">
+    <div className="min-w-0">
+      <div className="mb-6 surface p-5 sm:p-6">
+        <div className="eyebrow">Focused practice</div>
+        <div className="mt-2 flex items-end justify-between gap-4"><div><h1 className="text-2xl font-bold tracking-tight text-slate-950">系统练习</h1><p className="mt-1 text-sm text-slate-500">逐题确认答案，即时获得结果与解析</p></div><span className="shrink-0 text-sm font-bold tabular-nums text-slate-600">{idx + 1} / {items.length}</span></div>
         <div className="flex items-center gap-4">
-          <div className="flex-1 h-3 bg-gray-100 rounded-full overflow-hidden">
+          <div className="mt-5 h-2 flex-1 overflow-hidden rounded-full bg-slate-100">
             <div
-              className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full transition-all duration-500"
+              className="h-full rounded-full bg-blue-700 transition-all duration-500"
               style={{ width: `${((idx + 1) / items.length) * 100}%` }}
             />
           </div>
-          <span className="text-sm font-medium text-gray-600 tabular-nums">
-            {idx + 1} / {items.length}
-          </span>
         </div>
       </div>
 
-      <div className="p-6 md:p-8 rounded-2xl border-2 border-gray-100 bg-white shadow-card hover:shadow-card-hover transition-shadow mb-6">
-        <div className="text-sm font-medium text-indigo-600 mb-3">第 {idx + 1} 题</div>
-        <div className="text-lg font-medium text-gray-900 mb-6 leading-relaxed">
+      <div className="surface mb-5 p-5 sm:p-8">
+        <div className="mb-4 inline-flex rounded-lg bg-blue-50 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-blue-800">Question {String(idx + 1).padStart(2, '0')}</div>
+        <div className="mb-7 text-lg font-semibold leading-8 text-slate-950 sm:text-xl">
           {langMode === 'de-cn' ? q.questionCn : q.questionDe}
         </div>
         <div className="space-y-3">
           {(langMode === 'de-cn' ? q.optionsCn : q.optionsDe).map((opt, i) => (
             <QuestionOption
               key={i}
+              index={i}
               label={opt}
               imagePath={q.optionsImagePath?.[i]}
               selected={selected === i}
@@ -161,7 +158,7 @@ export function Practice() {
       </div>
 
       {showResult && q.explanation && (
-        <div className="p-6 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-100 mb-6">
+        <div className="mb-5 rounded-2xl border border-amber-200 bg-amber-50 p-5 sm:p-6">
           <div className="flex items-center gap-2 text-sm font-semibold text-amber-800 mb-2">
             <CheckCircle2 className="w-4 h-4" />
             解析
@@ -174,7 +171,7 @@ export function Practice() {
         <button
           onClick={handlePrev}
           disabled={idx === 0}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-gray-200 text-gray-700 font-medium hover:border-indigo-300 hover:bg-indigo-50 disabled:opacity-50 disabled:hover:bg-transparent transition-all"
+          className="btn-secondary px-4 sm:px-5"
         >
           <ChevronLeft className="w-4 h-4" />
           上一题
@@ -183,7 +180,7 @@ export function Practice() {
           <button
             onClick={handleConfirm}
             disabled={selected == null}
-            className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium shadow-lg hover:shadow-xl disabled:opacity-50 disabled:shadow-none transition-all"
+            className="btn-primary flex-1"
           >
             确认
           </button>
@@ -191,7 +188,7 @@ export function Practice() {
           <button
             onClick={handleNext}
             disabled={idx === items.length - 1}
-            className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium shadow-lg hover:shadow-xl disabled:opacity-50 disabled:shadow-none transition-all"
+            className="btn-primary flex-1"
           >
             下一题
             <ChevronRight className="w-4 h-4" />
@@ -206,6 +203,6 @@ export function Practice() {
       onJump={handleJump}
       mode="practice"
     />
-    </>
+    </div>
   )
 }

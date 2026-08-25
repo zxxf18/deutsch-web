@@ -163,27 +163,27 @@ export function MockExam() {
 
   if (!started) {
     return (
-      <div className="max-w-2xl mx-auto">
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-700 p-8 md:p-12 mb-8 shadow-xl">
+      <div className="mx-auto max-w-3xl">
+        <div className="relative mb-6 overflow-hidden rounded-[2rem] bg-slate-950 p-7 text-white shadow-[0_30px_90px_-40px_rgba(15,23,42,.7)] sm:p-10">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.08\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50" />
           <div className="relative">
-            <h1 className="text-2xl md:text-3xl font-bold text-white mb-4 drop-shadow-lg flex items-center gap-3">
+            <div className="eyebrow !text-amber-300">Mock examination</div><h1 className="mt-3 flex items-center gap-3 text-3xl font-bold tracking-tight text-white">
               <Trophy className="w-8 h-8" />
               模拟考试
             </h1>
             {selectedState && (
-              <p className="text-blue-200 text-sm mb-2 flex items-center gap-1">
+              <p className="mt-5 flex items-center gap-1 text-sm text-slate-300">
                 <MapPin className="w-4 h-4" />
                 目标州：{selectedState.nameCn || selectedState.name}
               </p>
             )}
-            <p className="text-blue-100 text-lg mb-6">
+            <p className="mt-3 text-lg text-slate-200">
               共 {config?.examQuestions ?? 33} 题，限时 {config?.examMinutes ?? 30} 分钟
             </p>
-            <p className="text-blue-100/90">答对 {config?.passScore ?? 17} 题即通过</p>
+            <p className="mt-2 text-slate-400">答对 {config?.passScore ?? 17} 题即通过</p>
           </div>
         </div>
-        <div className="p-6 rounded-2xl border-2 border-gray-100 bg-white shadow-card mb-6">
+        <div className="surface mb-6 p-6">
           <div className="flex items-center gap-4 text-gray-600">
             <div className="flex items-center gap-2">
               <Clock className="w-5 h-5 text-indigo-500" />
@@ -196,7 +196,7 @@ export function MockExam() {
         </div>
         <button
           onClick={handleStart}
-          className="flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+          className="btn-primary px-8 py-4"
         >
           <Play className="w-5 h-5" />
           开始考试
@@ -206,16 +206,12 @@ export function MockExam() {
   }
 
   return (
-    <div className="max-w-3xl mr-[300px] max-md:mr-[240px]">
-      <div className="mb-6">
-        <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-          模拟考试
-        </h1>
-      </div>
+    <div className="grid items-start gap-6 pb-28 lg:grid-cols-[minmax(0,1fr)_18rem] lg:pb-0"><div className="min-w-0">
+      <div className="surface mb-6 flex items-center justify-between gap-4 p-5"><div><div className="eyebrow">Mock examination</div><h1 className="mt-1 text-2xl font-bold text-slate-950">模拟考试</h1></div>
 
       {/* 浮动倒计时 */}
       <div
-        className={`fixed top-24 right-6 z-50 flex items-center gap-2 font-mono text-xl font-bold px-5 py-3 rounded-xl shadow-lg border-2 max-md:top-20 max-md:right-4 max-md:px-4 max-md:text-lg ${
+        className={`flex shrink-0 items-center gap-2 rounded-xl border px-3 py-2 font-mono text-base font-bold sm:px-4 sm:text-lg ${
           secondsLeft < 300
             ? 'bg-rose-100 text-rose-700 border-rose-200 animate-pulse'
             : 'bg-white text-indigo-700 border-indigo-100'
@@ -225,7 +221,7 @@ export function MockExam() {
         <span>
           {Math.floor(secondsLeft / 60)}:{(secondsLeft % 60).toString().padStart(2, '0')}
         </span>
-      </div>
+      </div></div>
 
       <div className="space-y-6 mb-8">
         {items.map((q, idx) => (
@@ -234,16 +230,17 @@ export function MockExam() {
             ref={(el) => {
               refsMap.current[idx] = el
             }}
-            className="p-6 rounded-2xl border-2 border-gray-100 bg-white shadow-card hover:shadow-card-hover transition-all scroll-mt-36"
+            className="surface scroll-mt-28 p-5 sm:p-7"
           >
-            <div className="text-sm font-medium text-indigo-600 mb-2">第 {idx + 1} 题</div>
-            <div className="text-base font-medium text-gray-900 mb-4 leading-relaxed">
+            <div className="mb-2 text-xs font-bold uppercase tracking-wider text-blue-700">Question {String(idx + 1).padStart(2, '0')}</div>
+            <div className="mb-5 font-semibold leading-7 text-slate-950">
               {q.questionCn}
             </div>
             <div className="space-y-2">
               {q.optionsCn.map((opt, i) => (
                 <QuestionOption
                   key={i}
+                  index={i}
                   label={opt}
                   imagePath={q.optionsImagePath?.[i]}
                   selected={answers[q.id] === i}
@@ -258,13 +255,13 @@ export function MockExam() {
       <button
         onClick={handleSubmit}
         disabled={submit.isPending || Object.keys(answers).length !== items.length}
-        className="flex items-center justify-center gap-2 w-full py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold shadow-lg hover:shadow-xl disabled:opacity-50 disabled:shadow-none transition-all"
+        className="btn-primary w-full py-4"
       >
         <Send className="w-5 h-5" />
         {submit.isPending ? '提交中...' : '提交试卷'}
       </button>
 
-      <QuestionOverviewPanel
+      </div><QuestionOverviewPanel
         total={items.length}
         currentIndex={scrollIndex}
         statusMap={statusMap}

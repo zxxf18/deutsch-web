@@ -84,21 +84,19 @@ export function ExamDetail() {
   })
 
   return (
-    <div className="max-w-4xl mr-[300px] max-md:mr-[240px]">
+    <div className="grid items-start gap-6 pb-28 lg:grid-cols-[minmax(0,1fr)_18rem] lg:pb-0"><div className="min-w-0">
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-          考试结果
-        </h1>
+        <div><div className="eyebrow">Exam review</div><h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-950">考试结果</h1></div>
         <Link
           to="/exams"
-          className="flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-gray-200 hover:border-blue-300 text-sm font-medium transition"
+          className="btn-secondary px-3 py-2 text-sm sm:px-4"
         >
           <ArrowLeft className="w-4 h-4" />
           返回列表
         </Link>
       </div>
 
-      <div className="p-6 rounded-2xl border-2 border-gray-100 bg-white shadow-card mb-8">
+      <div className="surface mb-8 p-6">
         <div className="flex flex-wrap items-center gap-4 mb-2">
           <span className="text-xl font-bold text-gray-900">
             得分：{data.score} / {data.total}
@@ -124,10 +122,10 @@ export function ExamDetail() {
             ref={(el) => {
               refsMap.current[idx] = el
             }}
-            className="p-6 rounded-2xl border-2 border-gray-100 bg-white shadow-sm hover:shadow-card transition-shadow scroll-mt-24"
+            className="surface scroll-mt-24 p-5 sm:p-6"
           >
-            <div className="text-sm font-medium text-indigo-600 mb-2">第 {idx + 1} 题</div>
-            <div className="text-base font-medium text-gray-900 mb-4">
+            <div className="mb-2 text-xs font-bold uppercase tracking-wider text-blue-700">Question {String(idx + 1).padStart(2, '0')}</div>
+            <div className="mb-4 font-semibold leading-7 text-slate-950">
               {d.questionCn || d.questionDe}
             </div>
             <div className="flex flex-wrap gap-2 mb-3">
@@ -172,7 +170,7 @@ export function ExamDetail() {
         ))}
       </div>
 
-      {details.length > 0 && (
+      </div>{details.length > 0 && (
         <QuestionOverviewPanel
           total={details.length}
           currentIndex={scrollIndex}
