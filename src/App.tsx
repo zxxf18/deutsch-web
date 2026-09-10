@@ -33,7 +33,7 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Toaster position="top-center" />
-      <BrowserRouter basename="/deutsch">
+      <BrowserRouter>
         <ScrollManager />
         <Routes>
           <Route path="/" element={<Layout />}>
