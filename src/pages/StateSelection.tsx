@@ -9,7 +9,7 @@ import { ArrowRight, MapPin } from 'lucide-react'
 export function StateSelection() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
-  const isAuth = !!useAuthStore((s) => s.token)
+  const isAuth = !!useAuthStore((s) => s.user)
   const { data: states } = useQuery({ queryKey: ['states'], queryFn: configApi.getStates })
   const { data: prefs } = useQuery({
     queryKey: ['preferences'],

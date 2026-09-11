@@ -1,8 +1,11 @@
 import { Outlet } from 'react-router-dom'
 import { Header } from './Header'
 import { ErrorBoundary } from './ErrorBoundary'
+import { useEffect } from 'react'
+import { authApi } from '@/api/auth'
 
 export function Layout() {
+  useEffect(() => { void authApi.me() }, [])
   return (
     <div className="min-h-screen flex flex-col">
       <Header />

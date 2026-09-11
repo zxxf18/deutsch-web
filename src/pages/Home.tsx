@@ -6,9 +6,8 @@ import { useAuthStore } from '@/stores/auth'
 import { ArrowRight, BookOpen, Clock3, FileCheck2, MapPin, RotateCcw, ShieldCheck, Sparkles } from 'lucide-react'
 
 export function Home() {
-  const token = useAuthStore((s) => s.token)
   const user = useAuthStore((s) => s.user)
-  const isAuth = !!token
+  const isAuth = !!user
   const { data: config } = useQuery({ queryKey: ['config'], queryFn: configApi.getConfig })
   const { data: states } = useQuery({ queryKey: ['states'], queryFn: configApi.getStates })
   const { data: prefs } = useQuery({ queryKey: ['preferences'], queryFn: progressApi.getPreferences, enabled: isAuth })

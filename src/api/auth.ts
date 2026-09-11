@@ -1,54 +1,9 @@
-import { api } from '@/lib/api'
 import { useAuthStore } from '@/stores/auth'
 import type { User } from '@/types'
 
-interface AuthData {
-  id?: string
-  username?: string
-  email?: string
-  role?: string
-  nickname?: string
-  jwt_token: string
-  expires: number
-  max_refresh: number
-}
-
+const BASE = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/api/v1`
 export const authApi = {
-  login: async (account: string, password: string) => {
-    const res = await api.post<AuthData>('/auth/login', { account, password })
-    const d = res.data
-    const user: User = {
-      id: d.id!,
-      username: d.username || '',
-      email: d.email || '',
-      role: d.role || 'user',
-      nickname: d.nickname,
-    }
-    useAuthStore.getState().setAuth(user, d.jwt_token, d.expires)
-    return res
-  },
-  register: async (data: {
-    email: string
-    password: string
-    invite_code: string
-    username?: string
-    nickname?: string
-  }) => {
-    const res = await api.post<AuthData>('/auth/register', data)
-    const d = res.data
-    const user: User = {
-      id: d.id!,
-      username: d.username || '',
-      email: d.email || '',
-      role: d.role || 'user',
-      nickname: d.nickname,
-    }
-    useAuthStore.getState().setAuth(user, d.jwt_token, d.expires)
-    return res
-  },
-  logout: async () => {
-    await api.post('/auth/logout').catch(() => {})
-    useAuthStore.getState().logout()
-  },
-  refresh: () => api.post<{ jwt_token: string; expires: number }>('/auth/jwt/refresh'),
+  me: async () => { const res = await fetch(BASE + '/auth/me', { credentials: 'same-origin' }).catch(() => null); if (!res?.ok) { useAuthStore.getState().setUser(null); return null }; const raw = await res.json() as { sub: string; username: string; email: string; role: string; display_name: string }; const user: User = { id: raw.sub, username: raw.username, email: raw.email, role: raw.role, nickname: raw.display_name }; useAuthStore.getState().setUser(user); return user },
+  login: (redirect = window.location.pathname) => { window.location.href = `/auth/login?return_to=${encodeURIComponent(redirect)}` },
+  logout: async () => { await fetch(BASE + '/auth/logout', { method: 'POST', credentials: 'same-origin' }).catch(() => {}); useAuthStore.getState().logout() },
 }

@@ -1,13 +1,12 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '@/stores/auth'
+import { authApi } from '@/api/auth'
 import { Menu, LogOut, User, ChevronDown, X } from 'lucide-react'
 import { useState } from 'react'
 
 export function Header() {
-  const token = useAuthStore((s) => s.token)
   const user = useAuthStore((s) => s.user)
-  const logout = useAuthStore((s) => s.logout)
-  const isAuthenticated = !!token
+  const isAuthenticated = !!user
   const isAdmin = user?.role === 'admin'
   const displayName = user?.nickname?.trim() || user?.username || user?.email || '用户'
   const navigate = useNavigate()
@@ -15,7 +14,7 @@ export function Header() {
   const [userMenuOpen, setUserMenuOpen] = useState(false)
 
   const handleLogout = async () => {
-    logout?.()
+    await authApi.logout()
     navigate('/')
     setUserMenuOpen(false)
   }

@@ -6,39 +6,17 @@ async function request<T>(
   path: string,
   opts: RequestInit = {}
 ): Promise<ApiResponse<T>> {
-  const token = useAuthStore.getState().token
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
     ...opts.headers,
   }
-  if (token) {
-    ;(headers as Record<string, string>)['Authorization'] = `Bearer ${token}`
-  }
-
-  let res = await fetch(BASE + path, { ...opts, headers })
+  let res = await fetch(BASE + path, { ...opts, headers, credentials: 'same-origin' })
 
   // 401: 尝试刷新 token 后重试
-  if (res.status === 401 && token && !path.includes('/jwt/refresh')) {
-    const refreshRes = await fetch(BASE + '/auth/jwt/refresh', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}` },
-    })
-    if (refreshRes.ok) {
-      const json = await refreshRes.json()
-      if (json.code === 0 && json.data?.jwt_token) {
-        useAuthStore.getState().setToken(json.data.jwt_token, json.data.expires)
-        ;(headers as Record<string, string>)['Authorization'] = `Bearer ${json.data.jwt_token}`
-        res = await fetch(BASE + path, { ...opts, headers })
-      } else {
-        useAuthStore.getState().logout()
-        window.location.href = `${import.meta.env.BASE_URL}login`
-        throw new Error('登录已过期')
-      }
-    } else {
-      useAuthStore.getState().logout()
-      window.location.href = `${import.meta.env.BASE_URL}login`
-      throw new Error('登录已过期')
-    }
+  if (res.status === 401) {
+    useAuthStore.getState().logout()
+    window.location.href = `/auth/login?return_to=${encodeURIComponent(window.location.pathname + window.location.search)}`
+    throw new Error('请先登录')
   }
 
   const json = await res.json().catch(() => ({ code: -1, msg: '网络错误' }))
