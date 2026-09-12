@@ -102,13 +102,13 @@ export function Header() {
                   <>
                     <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)} />
                     <div id="deutsch-user-menu" className="absolute right-0 z-50 mt-2 w-44 max-w-[calc(100vw-2rem)] rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl shadow-slate-900/10">
-                      <Link
-                        to="/profile"
+                      <a
+                        href="https://sso.yebuluo.com.cn/account"
                         className="block rounded-xl px-3 py-2 text-sm font-medium hover:bg-slate-50"
                         onClick={() => setUserMenuOpen(false)}
                       >
                         用户资料
-                      </Link>
+                      </a>
                       <button
                         onClick={handleLogout}
                         disabled={loggingOut}

@@ -17,7 +17,6 @@ import { ExamDetail } from './pages/ExamDetail'
 import { Exams } from './pages/Exams'
 import { Mistakes } from './pages/Mistakes'
 import { Strategy } from './pages/Strategy'
-import { Profile } from './pages/Profile'
 import { AdminUsers } from './pages/AdminUsers'
 import { AdminInviteCodes } from './pages/AdminInviteCodes'
 import { NotFound } from './pages/NotFound'
@@ -101,14 +100,6 @@ export default function App() {
               element={
                 <RequireAuth>
                   <Mistakes />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="profile"
-              element={
-                <RequireAuth>
-                  <Profile />
                 </RequireAuth>
               }
             />

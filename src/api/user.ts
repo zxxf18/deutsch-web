@@ -3,8 +3,6 @@ import type { User } from '@/types'
 
 export const userApi = {
   getUser: async (id: string) => (await api.get<User>(`/user/${id}`)).data,
-  updateProfile: async (data: { nickname?: string; description?: string }) =>
-    (await api.patch<User>('/user/profile', data)).data,
   list: (pageNo = 1, pageSize = 10) =>
     api.get<{ total: number; items: User[] }>(`/user/list?pageNo=${pageNo}&pageSize=${pageSize}`),
   delete: (id: string) => api.delete(`/user/${id}`),
