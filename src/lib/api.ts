@@ -10,7 +10,7 @@ async function request<T>(
     'Content-Type': 'application/json',
     ...opts.headers,
   }
-  let res = await fetch(BASE + path, { ...opts, headers, credentials: 'same-origin' })
+  const res = await fetch(BASE + path, { ...opts, headers, credentials: 'same-origin' })
 
   // 401: 尝试刷新 token 后重试
   if (res.status === 401) {

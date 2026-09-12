@@ -1,22 +1,32 @@
-import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { useAuthStore } from '@/stores/auth'
 import { authApi } from '@/api/auth'
 import { Menu, LogOut, User, ChevronDown, X } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
 
 export function Header() {
   const user = useAuthStore((s) => s.user)
   const isAuthenticated = !!user
   const isAdmin = user?.role === 'admin'
   const displayName = user?.nickname?.trim() || user?.username || user?.email || '用户'
-  const navigate = useNavigate()
+  const userTrigger = useRef<HTMLButtonElement>(null)
+  const [loggingOut, setLoggingOut] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
 
+  useEffect(() => {
+    if (!userMenuOpen) return
+    const close = (event: KeyboardEvent) => { if (event.key === 'Escape') { setUserMenuOpen(false); userTrigger.current?.focus() } }
+    document.addEventListener('keydown', close)
+    return () => document.removeEventListener('keydown', close)
+  }, [userMenuOpen])
+
   const handleLogout = async () => {
-    await authApi.logout()
-    navigate('/')
-    setUserMenuOpen(false)
+    setLoggingOut(true)
+    try { await authApi.logout() }
+    catch (error) { toast.error((error as Error).message) }
+    finally { setLoggingOut(false) }
   }
 
   const navLinks = [
@@ -71,11 +81,14 @@ export function Header() {
             {isAuthenticated ? (
               <div className="relative">
                 <button
+                  ref={userTrigger}
+                  aria-expanded={userMenuOpen}
+                  aria-controls="deutsch-user-menu"
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
                   className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:border-slate-300"
                 >
                   <User size={18} />
-                  <span className="hidden sm:inline max-w-32 truncate" title={displayName}>
+                  <span className="block min-w-0 max-w-[7ch] truncate sm:max-w-[10ch]" title={displayName}>
                     {displayName}
                   </span>
                   {isAdmin && (
@@ -88,20 +101,21 @@ export function Header() {
                 {userMenuOpen && (
                   <>
                     <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)} />
-                    <div className="absolute right-0 z-50 mt-2 w-44 rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl shadow-slate-900/10">
+                    <div id="deutsch-user-menu" className="absolute right-0 z-50 mt-2 w-44 max-w-[calc(100vw-2rem)] rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl shadow-slate-900/10">
                       <Link
                         to="/profile"
                         className="block rounded-xl px-3 py-2 text-sm font-medium hover:bg-slate-50"
                         onClick={() => setUserMenuOpen(false)}
                       >
-                        个人中心
+                        用户资料
                       </Link>
                       <button
                         onClick={handleLogout}
+                        disabled={loggingOut}
                         className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-medium text-rose-600 hover:bg-rose-50"
                       >
                         <LogOut size={16} />
-                        登出
+                        {loggingOut ? '正在退出…' : '退出登录'}
                       </button>
                     </div>
                   </>

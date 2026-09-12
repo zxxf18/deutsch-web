@@ -34,6 +34,7 @@ export interface User {
   email: string
   role: string
   nickname?: string
+  description?: string
   is_enabled?: boolean
   createdAt?: number
   updatedAt?: number
