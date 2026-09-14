@@ -5,7 +5,6 @@ import { Layout } from './components/Layout'
 import { RequireAuth } from './components/RequireAuth'
 import { RequireGuest } from './components/RequireGuest'
 import { RequireGuestOrAdmin } from './components/RequireGuestOrAdmin'
-import { RequireAdmin } from './components/RequireAdmin'
 import { Home } from './pages/Home'
 import { StateSelection } from './pages/StateSelection'
 import { Login } from './pages/Login'
@@ -17,8 +16,6 @@ import { ExamDetail } from './pages/ExamDetail'
 import { Exams } from './pages/Exams'
 import { Mistakes } from './pages/Mistakes'
 import { Strategy } from './pages/Strategy'
-import { AdminUsers } from './pages/AdminUsers'
-import { AdminInviteCodes } from './pages/AdminInviteCodes'
 import { NotFound } from './pages/NotFound'
 import { ScrollManager } from './components/ScrollManager'
 
@@ -100,26 +97,6 @@ export default function App() {
               element={
                 <RequireAuth>
                   <Mistakes />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="admin/users"
-              element={
-                <RequireAuth>
-                  <RequireAdmin>
-                    <AdminUsers />
-                  </RequireAdmin>
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="admin/invite-codes"
-              element={
-                <RequireAuth>
-                  <RequireAdmin>
-                    <AdminInviteCodes />
-                  </RequireAdmin>
                 </RequireAuth>
               }
             />
